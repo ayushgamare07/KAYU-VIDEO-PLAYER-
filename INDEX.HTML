@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KayU 2.0 Link Player</title>
+<style>
+*{box-sizing:border-box}
+:root{--cream:#f3e3c8;--green:#293b38;--red:#c94b42}
+body{margin:0;font-family:Arial,sans-serif;color:var(--green);background:var(--cream)}
+#app{min-height:100vh;background-color:var(--cream);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 288 234'%3E%3Crect width='288' height='234' fill='%23f3e3c8'/%3E%3Cg fill='%23293b38'%3E%3Cpath d='M195 0 Q250 15 288 100 Q250 60 195 0Z M210 0 Q250 0 288 40 Q250 20 210 0Z M180 15 Q220 5 260 45 Q220 35 180 15Z M175 32 Q215 20 250 55 Q210 50 175 32Z M180 52 Q215 38 245 68 Q210 68 180 52Z M190 70 Q215 55 235 80 Q210 83 190 70Z M210 88 Q230 70 245 92 Q225 98 210 88Z M225 0 Q220 35 180 60 Q200 25 225 0Z M250 0 Q245 40 215 70 Q235 30 250 0Z M275 0 Q270 35 245 55 Q260 20 275 0Z M0 140 Q20 160 20 200 Q5 170 0 140Z M0 160 Q15 145 30 150 Q15 165 0 160Z M0 180 Q18 165 35 175 Q18 188 0 180Z M0 200 Q15 185 30 195 Q15 207 0 200Z'/%3E%3C/g%3E%3Cpath d='M20 20 H170 M34 213 H253' stroke='%23293b38' fill='none' stroke-width='1.3'/%3E%3C/svg%3E");background-size:cover;background-position:center;background-repeat:no-repeat}
+.wrap{max-width:1000px;margin:auto;padding:25px 20px 45px}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:45px}
+.brand{font-size:24px;font-weight:800;letter-spacing:-1px}
+.logo{display:inline-grid;place-items:center;width:38px;height:38px;background:var(--green);color:var(--cream);margin-right:8px}
+.pill{font-size:11px;border:1px solid var(--green);padding:8px 12px}
+.hero{text-align:center;margin:0 auto 30px;max-width:700px}
+.eyebrow{font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase}
+h1{font-family:Georgia,serif;font-size:clamp(35px,6vw,56px);line-height:1.08;margin:15px 0}
+h1 span{color:var(--red)}
+.lead{font-size:15px;line-height:1.7;max-width:580px;margin:auto}
+.panel{background:rgba(255,250,239,.94);border:1.5px solid var(--green);padding:clamp(16px,3vw,28px)}
+.label{display:block;font-size:12px;font-weight:bold;margin-bottom:10px}
+.linkrow{display:flex;gap:10px}
+input{width:100%;min-width:0;padding:15px;border:1px solid var(--green);border-radius:0;background:#fffaf0;font:inherit;color:var(--green)}
+button,.btn{padding:13px 16px;border:1.5px solid var(--green);border-radius:0;font:inherit;font-size:13px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:7px}
+button:hover,.btn:hover{background:var(--red);color:white}
+.primary{background:var(--green);color:white}
+.secondary,.ghost{background:var(--cream);color:var(--green)}
+.note,.small,.status{font-size:12px;line-height:1.6}
+.playerlabel{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:20px 0 10px}
+.playerbox{min-height:230px;background:#18211f;border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.playerbox iframe{width:100%;aspect-ratio:16/9;border:0;display:block}
+.playerbox video{width:100%;max-height:65vh;background:#111}
+.playerbox audio{width:90%}
+.empty{text-align:center;color:#f3e3c8;padding:40px 20px}
+.playicon{font-size:38px;margin-bottom:10px}
+.empty strong{display:block;margin-bottom:8px}
+.empty p{font-size:13px;line-height:1.6}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.actions button{width:100%;font-size:12px;padding:13px 6px}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+select{padding:10px;border:1px solid var(--green);border-radius:0;background:#fffaf0;color:var(--green)}
+.message{display:none;margin-top:14px;padding:12px;background:#fffaf0;border:1px solid var(--green);border-left:5px solid var(--red);font-size:13px;line-height:1.6}
+.message.show{display:block}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.feature{padding:20px;border:1.5px solid var(--green);background:rgba(255,250,239,.92)}
+.feature .ico{font-size:22px;margin-bottom:10px}
+.feature b{display:block;font-size:13px;margin-bottom:8px}
+.feature p{font-size:12px;line-height:1.6;margin:0}
+footer{text-align:center;font-size:11px;margin-top:30px;line-height:1.7}
+@media(max-width:650px){
+.wrap{padding:18px 14px 30px}
+nav{margin-bottom:35px}
+.linkrow{flex-direction:column}
+.linkrow button{width:100%}
+.actions,.features{grid-template-columns:1fr}
+.panel{padding:16px}
+.playerbox{min-height:200px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+<main class="wrap">
+<nav>
+  <div class="brand"><span class="logo">K</span>KayU 2.0</div>
+  <div class="pill">✦ LINK PLAYER</div>
+</nav>
+
+<header class="hero">
+  <div class="eyebrow">A little space for your favourites</div>
+  <h1>Your media,<br><span>your little world.</span></h1>
+  <p class="lead">Paste a supported video or audio link and play it here. A calm, botanical theme with a simple 2D design for mobile and PC.</p>
+</header>
+
+<section class="panel">
+  <label class="label" for="urlInput">PASTE YOUR VIDEO OR AUDIO LINK</label>
+  <div class="linkrow">
+    <input id="urlInput" type="url" placeholder="https://… paste link here">
+    <button class="primary" id="playBtn">▶ PLAY HERE</button>
+  </div>
+  <p class="note">Supports YouTube embeds and direct MP4, WebM, MP3 and OGG files. Some platforms block embedded playback.</p>
+
+  <div class="playerlabel">
+    <b>Now playing</b><span class="status" id="status">Ready for a link</span>
+  </div>
+  <div class="playerbox" id="player">
+    <div class="empty">
+      <div class="playicon">▷</div>
+      <strong>Your player is ready</strong>
+      <p>Paste a link above and press Play Here.</p>
+    </div>
+  </div>
+
+  <div class="playerlabel">
+    <b>Media options</b><span class="small" id="typeLabel">No media loaded</span>
+  </div>
+  <div class="actions">
+    <button class="secondary" id="playAgain">▶ PLAY</button>
+    <button class="secondary" id="downloadVideo">↓ DOWNLOAD VIDEO</button>
+    <button class="secondary" id="downloadAudio">♫ DOWNLOAD AUDIO</button>
+  </div>
+
+  <div class="controls">
+    <label class="small" for="quality">Resolution</label>
+    <select id="quality">
+      <option value="">Source quality (default)</option>
+      <option disabled>360p — source-dependent</option>
+      <option disabled>720p — source-dependent</option>
+      <option disabled>1080p — source-dependent</option>
+      <option disabled>4K — source-dependent</option>
+    </select>
+    <span class="small">Quality depends on the original source.</span>
+  </div>
+
+  <div class="message" id="message" role="status"></div>
+  <div class="controls">
+    <a class="btn ghost" id="openOriginal" href="#" target="_blank" rel="noopener noreferrer" style="display:none">↗ OPEN ORIGINAL LINK</a>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <div class="ico">⚡</div><b>Quick playback</b>
+    <p>Play compatible media without leaving KayU.</p>
+  </div>
+  <div class="feature">
+    <div class="ico">↓</div><b>Download options</b>
+    <p>Direct media downloads work when the source allows them.</p>
+  </div>
+  <div class="feature">
+    <div class="ico">▣</div><b>Any screen</b>
+    <p>Responsive layout for mobile, tablet, laptop and desktop.</p>
+  </div>
+</section>
+
+<footer>KayU 2.0 · Free to use · Only download media you own or have permission to save.</footer>
+</main>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+let currentUrl='',currentType='',directUrl='';
+
+function message(text){
+  $('message').textContent=text;
+  $('message').classList.add('show');
+}
+function clearMessage(){
+  $('message').textContent='';
+  $('message').classList.remove('show');
+}
+function validUrl(raw){
+  try{
+    const u=new URL(raw);
+    return ['http:','https:'].includes(u.protocol)?u:null;
+  }catch(e){return null}
+}
+function youtubeId(u){
+  if(u.hostname==='youtu.be')
+    return u.pathname.split('/').filter(Boolean)[0]||'';
+  if(u.hostname.endsWith('youtube.com')||u.hostname==='youtube-nocookie.com'){
+    if(u.pathname==='/watch')return u.searchParams.get('v')||'';
+    const m=u.pathname.match(/^\/(embed|shorts|live)\/([^/?]+)/);
+    return m?m[2]:'';
+  }
+  return '';
+}
+function cleanPlayer(){
+  $('player').innerHTML='';
+  directUrl='';
+}
+function showOriginal(url){
+  const a=$('openOriginal');
+  a.href=url;
+  a.style.display='inline-flex';
+}
+function hideOriginal(){
+  $('openOriginal').style.display='none';
+  $('openOriginal').removeAttribute('href');
+}
+function play(){
+  clearMessage();
+  const u=validUrl($('urlInput').value.trim());
+  if(!u){
+    message('Please enter a valid link starting with https:// or http://.');
+    $('status').textContent='Invalid link';
+    return;
+  }
+
+  currentUrl=u.href;
+  cleanPlayer();
+  hideOriginal();
+  $('status').textContent='Loading…';
+  $('typeLabel').textContent='Checking source';
+
+  const id=youtubeId(u);
+  if(id){
+    const iframe=document.createElement('iframe');
+    iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id);
+    iframe.title='YouTube video player';
+    iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen=true;
+    iframe.referrerPolicy='strict-origin-when-cross-origin';
+    $('player').appendChild(iframe);
+    currentType='youtube';
+    $('status').textContent='YouTube embed';
+    $('typeLabel').textContent='YouTube video';
+    showOriginal(currentUrl);
+    message('YouTube is playing through its official embed. Direct downloads are not available here.');
+    return;
+  }
+
+  const path=u.pathname.toLowerCase();
+  const video=/\.(mp4|webm|ogv|mov|m4v)$/.test(path);
+  const audio=/\.(mp3|m4a|aac|wav|ogg|opus|flac)$/.test(path);
+
+  if(video||audio){
+    const media=document.createElement(video?'video':'audio');
+    media.src=u.href;
+    media.controls=true;
+    media.preload='metadata';
+    media.playsInline=true;
+    $('player').appendChild(media);
+
+    currentType=video?'video':'audio';
+    directUrl=u.href;
+    $('status').textContent='Direct media';
+    $('typeLabel').textContent=video?'Direct video file':'Direct audio file';
+    showOriginal(currentUrl);
+
+    media.addEventListener('error',()=>{
+      $('status').textContent='Playback failed';
+      message('This source could not be played. The server may block browser playback.');
+    });
+    media.play().catch(()=>{});
+    message('Media loaded. Downloads depend on the source server.');
+    return;
+  }
+
+  currentType='unsupported';
+  $('status').textContent='External source';
+  $('typeLabel').textContent='Unsupported link';
+  $('player').innerHTML='<div class="empty"><div class="playicon">↗</div><strong>This source may block playback</strong><p>Open the original link to view this media.</p></div>';
+  showOriginal(currentUrl);
+  message('This link is not a supported direct media file or YouTube video.');
+}
+function playAgain(){
+  const media=$('player').querySelector('video,audio');
+  if(media){media.play().catch(()=>message('Press Play inside the media player.'));return}
+  if(currentUrl){$('urlInput').value=currentUrl;play()}
+  else message('Paste a link first.');
+}
+function download(kind){
+  clearMessage();
+  if(!currentUrl){message('Play a supported media link first.');return}
+  if(currentType==='youtube'){
+    message('YouTube downloads are not provided by this page.');
+    return;
+  }
+  if(currentType!=='video'&&currentType!=='audio'){
+    message('Download is unavailable for this source.');
+    return;
+  }
+  if(kind==='video'&&currentType!=='video'){
+    message('The current source is audio, not video.');
+    return;
+  }
+  if(kind==='audio'&&currentType!=='audio'){
+    message('This page cannot convert video into an audio file.');
+    return;
+  }
+  const a=document.createElement('a');
+  a.href=directUrl;
+  a.download=directUrl.split('/').pop().split('?')[0]||(kind==='audio'?'media.mp3':'media.mp4');
+  a.rel='noopener';
+  a.target='_blank';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  message('Download requested. The source server may block it.');
+}
+$('playBtn').addEventListener('click',play);
+$('urlInput').addEventListener('keydown',e=>{if(e.key==='Enter')play()});
+$('playAgain').addEventListener('click',playAgain);
+$('downloadVideo').addEventListener('click',()=>download('video'));
+$('downloadAudio').addEventListener('click',()=>download('audio'));
+$('openOriginal').addEventListener('click',e=>{
+  if(!$('openOriginal').getAttribute('href')||$('openOriginal').getAttribute('href')==='#'){
+    e.preventDefault();
+    message('No original link available yet.');
+  }
+});
+$('quality').addEventListener('change',()=>{
+  message('Resolution selection requires source-provided video variants. This player does not convert video.');
+});
+})();
+</script>
+</body>
+</html>
